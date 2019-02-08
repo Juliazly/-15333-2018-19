@@ -1,0 +1,148 @@
+package org.firstinspires.ftc.teamcode;
+
+
+/*
+created by Julia Zhou
+ */
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
+import com.qualcomm.robotcore.hardware.HardwareDevice;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.robot.Robot;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+/* two types of OpMode
+Linear OpMode and iterative OpMode
+
+The LinearOpMode gives access to the single method called runoff mode.
+ It runs once and all codes goes in there
+
+The iterative OpMode gives accesses to two methods called init which is called once in the initialization
+and loop which is repeatedly called after start*/
+
+@TeleOp (name = "TeleOpFeb67", group = "TeleOp Draft")
+//assume the robot has two drive motors and an arm servo
+//drive and then control the arm
+
+
+public class TeleOpDraft extends LinearOpMode
+{
+
+
+
+    //clear the motor objects
+    private DcMotor motorLeft;
+    private DcMotor motorRight;
+
+    private DcMotor armLeft;
+    private DcMotor armRight;
+
+    private DcMotor pullLeft;
+    private DcMotor pullRight;
+
+    private CRServo collector;
+
+    ElapsedTime runtime = new ElapsedTime();
+
+    @Override
+    public void runOpMode () throws InterruptedException
+    {
+
+        motorLeft = hardwareMap.dcMotor.get("motorLeft");
+        motorRight = hardwareMap.dcMotor.get("motorRight");
+
+        motorLeft.setDirection(DcMotor.Direction.REVERSE);
+
+        collector = hardwareMap.crservo.get("collector");
+
+
+        armLeft = hardwareMap.dcMotor.get("armLeft");
+        armRight = hardwareMap.dcMotor.get("armRight");
+
+        armLeft.setDirection(DcMotor.Direction.REVERSE);
+
+
+        pullLeft = hardwareMap.dcMotor.get("pullLeft");
+        pullRight = hardwareMap.dcMotor.get("pullRight");
+
+
+
+        waitForStart();
+
+        while (opModeIsActive())
+        {
+
+            //tank drive
+            motorLeft.setPower(-gamepad1.left_stick_y);
+            motorRight.setPower(-gamepad1.right_stick_y);
+
+            pullLeft.setPower(gamepad2.left_stick_y);
+            pullRight.setPower(gamepad2.left_stick_y);
+
+
+            //stop motors to hold the arms when dpad is not pressed
+
+            if (gamepad2.dpad_up) {
+
+                armLeft.setPower(1.0);
+                armRight.setPower(1.0);
+
+            }else if (gamepad2.dpad_down){
+
+                armLeft.setPower(-1.0);
+                armRight.setPower(-1.0);
+
+            }else {
+
+                armLeft.setPower(0);
+                armRight.setPower(0);
+
+            }
+
+            
+            //CRservo rotates clockwise, counterclockwise and stop on gamepad1
+            if (gamepad1.a)
+            {
+                collector.setPower(0.5);
+
+            } else if (gamepad1.b){
+
+                collector.setPower(-0.5);
+                
+            } else if (gamepad1.x){
+                
+                collector.setPower(0);
+            }
+
+
+
+            if (gamepad2.x) {
+
+                pullLeft.setPower(0.5);
+                pullRight.setPower(0.5);
+
+            } else if (gamepad2.y) {
+
+                pullLeft.setPower(-0.5);
+                pullRight.setPower(-0.5);
+
+            } else {
+
+                pullLeft.setPower(0);
+                pullRight.setPower(0);
+        }
+
+
+
+
+            idle();
+        }
+
+    }
+
+}
