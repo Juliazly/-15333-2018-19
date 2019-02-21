@@ -1,0 +1,142 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
+
+    /**
+     *Autonomous program for Swerve Robotics tutorial
+     */
+
+    @Autonomous(name = "Autonomous")
+
+
+    public class Auto2 extends LinearOpMode
+    {
+        //declare motors
+        DcMotor motorLeft = null;
+        DcMotor motorRight = null;
+
+        DcMotor armLeft = null;
+        DcMotor armRight = null;
+
+        DcMotor pullLeft = null;
+        DcMotor pullRight = null;
+
+        //declare servo
+        Servo collector = null;
+
+
+        @Override public void runOpMode () throws InterruptedException
+        {
+            /* initialize our hardware variables. Note that the strings used here as parameters
+             * to 'get' must correspond to the name you assigned during the robot configuration
+             * step you did in the FTC Robot Controller app on the phone
+             */
+
+            //initialize motors
+            motorLeft = hardwareMap.dcMotor.get("motorLeft");
+            motorRight = hardwareMap.dcMotor.get("motorRight");
+
+            motorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+            motorLeft.setDirection(DcMotor.Direction.REVERSE);
+            motorRight.setDirection(DcMotor.Direction.FORWARD);
+
+
+            armLeft = hardwareMap.dcMotor.get("armLeft");
+            armRight = hardwareMap.dcMotor.get("armRight");
+
+            armLeft.setDirection(DcMotor.Direction.REVERSE);
+            armRight.setDirection(DcMotor.Direction.FORWARD);
+
+
+            pullLeft = hardwareMap.dcMotor.get("pullLeft");
+            pullRight = hardwareMap.dcMotor.get("pullRight");
+
+            pullLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            pullRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+
+            //initialize servos
+            collector = hardwareMap.servo.get("collector");
+
+
+
+            //wait for the game to start
+            waitForStart ();
+
+            DriveFowardTime(DRIVE_POWER,4000);
+
+            TurnLeftTime(DRIVE_POWER,500);
+
+            DriveFowardTime(DRIVE_POWER,4000);
+
+            TurnRightTime(DRIVE_POWER,500);
+
+            DriveFowardTime(DRIVE_POWER,4000);
+
+            //finish the objective and stop
+            StopDriving();
+
+
+
+        }
+
+        //make "method" for functions
+
+        double DRIVE_POWER = 1.0;
+
+        public void DriveForward (double power)
+        {
+            motorLeft.setPower(power);
+            motorRight.setPower(power);
+        }
+
+        public void DriveFowardTime (double power, long time) throws InterruptedException
+        {
+            DriveForward(power);
+            Thread.sleep(time);
+        }
+
+
+        public void StopDriving ()
+        {
+            DriveForward(0);
+        }
+
+        public void TurnLeft (double power)
+        {
+            motorLeft.setPower(-power);
+            motorRight.setPower(power);
+        }
+
+        public void TurnLeftTime (double power, long time) throws InterruptedException
+        {
+            TurnLeft(power);
+            Thread.sleep(time);
+        }
+
+        public void TurnRight (double power)
+        {
+            TurnLeft(-power);
+        }
+
+        public void TurnRightTime (double power, long time) throws InterruptedException
+        {
+            TurnRight(power);
+            Thread.sleep(time);
+        }
+
+
+
+
+
+    }
+
+
+
+
