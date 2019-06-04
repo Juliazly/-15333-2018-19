@@ -1,0 +1,97 @@
+package org.firstinspires.ftc.teamcode;
+
+import android.hardware.camera2.CameraConstrainedHighSpeedCaptureSession;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+@Autonomous (name="Auto1", group="autonomous")
+
+public class Auto1 extends LinearOpMode {
+
+    private ElapsedTime runtime = new ElapsedTime();
+
+    //define all the properties
+    //declare 5 motors
+    private DcMotor motorLeft;
+    private DcMotor motorRight;
+
+    private DcMotor armLeft;
+    private DcMotor armRight;
+
+    DcMotor pull = null;
+
+    //declare 1 servo
+    CRServo collector = null;
+
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
+
+        motorLeft = hardwareMap.dcMotor.get("motorLeft");
+        motorRight = hardwareMap.dcMotor.get("motorRight");
+
+        motorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        motorLeft.setDirection(DcMotor.Direction.REVERSE);
+        motorRight.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        armLeft = hardwareMap.dcMotor.get("armLeft");
+        armRight = hardwareMap.dcMotor.get("armRight");
+
+        armLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        armLeft.setDirection(DcMotor.Direction.REVERSE);
+        armRight.setDirection(DcMotor.Direction.FORWARD);
+
+        collector = hardwareMap.crservo.get("collector");
+
+        pull = hardwareMap.dcMotor.get("pull");
+
+
+        //wait for the game to start
+        waitForStart();
+        runtime.reset();
+
+        while (opModeIsActive()) {
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.update();
+
+            motorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            motorLeft.setTargetPosition(1000);
+            motorRight.setTargetPosition(1000);
+
+            motorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            motorLeft.setPower(0.4);
+            motorRight.setPower(0.4);
+
+            motorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            motorLeft.setTargetPosition(0);
+            motorRight.setTargetPosition(0);
+
+            motorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            motorLeft.setPower(0.0);
+            motorRight.setPower(0.0);
+
+
+        }
+    }
+}
